@@ -11,3 +11,5 @@ pydantic==2.9.2
 numpy==1.26.4
 pandas==2.2.3
 Pillow==10.0.1
+qrcode[pil]
+
