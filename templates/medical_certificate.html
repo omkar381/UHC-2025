@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Certificate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .certificate {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 40px;
+            background: linear-gradient(to bottom, #ffffff 0%, #f9f9f9 100%);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #2c7be5;
+            padding-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: linear-gradient(to right, rgba(44, 123, 229, 0.05) 0%, rgba(44, 123, 229, 0.1) 50%, rgba(44, 123, 229, 0.05) 100%);
+            padding-top: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .hospital-logo {
+            max-width: 150px;
+            max-height: 100px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            border-radius: 8px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        .hospital-logo:hover {
+            transform: scale(1.05);
+        }
+        .uhc-logo {
+            max-width: 180px;
+            max-height: 90px;
+            object-fit: contain;
+            margin-left: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        .hospital-name {
+            font-size: 28px;
+            color: #2c7be5;
+            font-weight: bold;
+            margin: 10px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .certificate-title {
+            font-size: 32px;
+            color: #1a1f36;
+            margin: 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            background: linear-gradient(45deg, #2c7be5, #3a86ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .digital-notice {
+            font-size: 14px;
+            color: #555;
+            margin: 5px 0 15px 0;
+            background-color: #f0f7ff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            width: 100%;
+            text-align: center;
+            border-left: 4px solid #2c7be5;
+            border-right: 4px solid #2c7be5;
+        }
+        .content {
+            padding: 20px;
+            position: relative;
+        }
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 100px;
+            opacity: 0.05;
+            color: #2c7be5;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .patient-info, .medical-info {
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #2c7be5;
+        }
+        .patient-info h3, .medical-info h3 {
+            color: #2c7be5;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .patient-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .patient-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #2c7be5;
+            margin-right: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .patient-qr {
+            width: 100px;
+            height: 100px;
+            margin-left: auto;
+            border: 1px solid #e0e0e0;
+            padding: 5px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .info-row {
+            display: flex;
+            margin: 12px 0;
+            border-bottom: 1px dashed #e0e0e0;
+            padding-bottom: 8px;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .label {
+            width: 150px;
+            font-weight: bold;
+            color: #2c7be5;
+        }
+        .value {
+            flex: 1;
+            color: #1a1f36;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: right;
+            border-top: 2px solid #2c7be5;
+            padding-top: 20px;
+            background: linear-gradient(to right, rgba(44, 123, 229, 0.05) 0%, rgba(44, 123, 229, 0.1) 50%, rgba(44, 123, 229, 0.05) 100%);
+            border-radius: 0 0 10px 10px;
+            padding: 20px;
+        }
+        .signature {
+            display: inline-block;
+            margin-left: 20px;
+            text-align: center;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        .signature img {
+            max-width: 180px;
+            margin-bottom: 10px;
+            filter: contrast(1.2);
+            transform: rotate(-2deg);
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .signature-line {
+            width: 200px;
+            border-top: 2px solid #1a1f36;
+            margin-top: 10px;
+        }
+        .seal {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            width: 120px;
+            height: 120px;
+            border: 2px solid #2c7be5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #2c7be5;
+            transform: rotate(-15deg);
+            opacity: 0.8;
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 0 15px rgba(44, 123, 229, 0.2);
+        }
+        @media print {
+            body {
+                background: white;
+            }
+            .certificate {
+                box-shadow: none;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+        /* Timeline styles */
+        .timeline {
+            position: relative;
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #2c7be5;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 15px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #2c7be5;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 2px #2c7be5;
+        }
+        .timeline-date {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .timeline-title {
+            font-weight: bold;
+            color: #2c7be5;
+            margin-bottom: 5px;
+        }
+        .timeline-content {
+            color: #333;
+        }
+        /* Medication schedule styles */
+        .medication-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .medication-table th, .medication-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .medication-table th {
+            background: #f0f7ff;
+            color: #2c7be5;
+            font-weight: bold;
+        }
+        .medication-table tr:last-child td {
+            border-bottom: none;
+        }
+        /* Follow-up styles */
+        .follow-up {
+            background: #f0f7ff;
+            border-left: 4px solid #2c7be5;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .follow-up-date {
+            font-weight: bold;
+            color: #2c7be5;
+            margin-bottom: 5px;
+        }
+        /* Insurance styles */
+        .insurance-info {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #2c7be5;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .insurance-info h3 {
+            color: #2c7be5;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        /* Certificate history styles */
+        .certificate-history {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #2c7be5;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .certificate-history h3 {
+            color: #2c7be5;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .certificate-item {
+            padding: 10px 0;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        .certificate-item:last-child {
+            border-bottom: none;
+        }
+        .certificate-date {
+            font-weight: bold;
+            color: #2c7be5;
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate">
+        <div class="watermark">CERTIFIED</div>
+        <div class="header">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='images/hospital-logo.jpg') }}" alt="Hospital Logo" class="hospital-logo" style="object-fit: contain;">
+                <img src="{{ url_for('static', filename='images/uhc-logo.jpg') }}" alt="Universal Health Card Logo" class="uhc-logo" style="max-height: 80px; object-fit: contain;">
+            </div>
+            <div class="hospital-name">{{ record.hospital_name }}</div>
+            <div class="certificate-title">Medical Certificate</div>
+            <div class="digital-notice">*THIS IS DIGITALLY GENERATED MEDICAL CERTIFICATE FROM UNIVERSAL HEALTH CARD*</div>
+        </div>
+        
+        <div class="content">
+            <div class="patient-info">
+                <h3>Patient Information</h3>
+                <div class="patient-header">
+                    {% if user.photo_path %}
+                    <img src="{{ url_for('static', filename=user.photo_path) }}" alt="Patient Photo" class="patient-photo">
+                    {% else %}
+                    <div class="patient-photo" style="display: flex; align-items: center; justify-content: center; background: #f0f0f0;">
+                        <i class="fas fa-user" style="font-size: 40px; color: #2c7be5;"></i>
+                    </div>
+                    {% endif %}
+                    
+                    {% if user.unique_id %}
+                    <img src="{{ url_for('static', filename='qr_codes/' + user.unique_id + '.png') }}" alt="Patient QR Code" class="patient-qr">
+                    {% endif %}
+                </div>
+                
+                <div class="info-row">
+                    <div class="label">Name:</div>
+                    <div class="value">{{ user.name }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="label">UIN:</div>
+                    <div class="value">{{ user.uin }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Date of Birth:</div>
+                    <div class="value">{{ user.dob }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Address:</div>
+                    <div class="value">{{ user.address }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Phone:</div>
+                    <div class="value">{{ user.phone }}</div>
+                </div>
+            </div>
+
+            <div class="medical-info">
+                <h3>Medical Details</h3>
+                <div class="info-row">
+                    <div class="label">Doctor:</div>
+                    <div class="value">Dr. {{ record.doctor_name }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Diagnosis:</div>
+                    <div class="value">{{ record.diagnosis }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Treatment:</div>
+                    <div class="value">{{ record.treatment }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Medicines:</div>
+                    <div class="value">{{ record.medicines }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Date:</div>
+                    <div class="value">{{ record.timestamp }}</div>
+                </div>
+                {% if record.notes %}
+                <div class="info-row">
+                    <div class="label">Additional Notes:</div>
+                    <div class="value">{{ record.notes }}</div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Insurance Information Section -->
+            <div class="insurance-info">
+                <h3>Insurance Information</h3>
+                <div class="info-row">
+                    <div class="label">Provider:</div>
+                    <div class="value">{{ user.insurance_provider if user.insurance_provider else 'Not Available' }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Policy Number:</div>
+                    <div class="value">{{ user.policy_number if user.policy_number else 'Not Available' }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Coverage Type:</div>
+                    <div class="value">{{ user.coverage_type if user.coverage_type else 'Not Available' }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="label">Valid Until:</div>
+                    <div class="value">{{ user.insurance_valid_until if user.insurance_valid_until else 'Not Available' }}</div>
+                </div>
+            </div>
+            
+            <!-- Medication Schedule Section -->
+            <div class="medical-info">
+                <h3>Medication Schedule</h3>
+                <table class="medication-table">
+                    <thead>
+                        <tr>
+                            <th>Medication</th>
+                            <th>Dosage</th>
+                            <th>Frequency</th>
+                            <th>Duration</th>
+                            <th>Special Instructions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if medications %}
+                            {% for med in medications %}
+                            <tr>
+                                <td>{{ med.name }}</td>
+                                <td>{{ med.dosage }}</td>
+                                <td>{{ med.frequency }}</td>
+                                <td>{{ med.duration }}</td>
+                                <td>{{ med.instructions }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" style="text-align: center;">No medication schedule available</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Follow-up Reminders Section -->
+            <div class="medical-info">
+                <h3>Follow-up Appointments</h3>
+                {% if appointments %}
+                    {% for appointment in appointments %}
+                    <div class="follow-up">
+                        <div class="follow-up-date">{{ appointment.date }} at {{ appointment.time }}</div>
+                        <div>Doctor: {{ appointment.doctor }}</div>
+                        <div>Purpose: {{ appointment.purpose }}</div>
+                        <div>Location: {{ appointment.location }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="text-align: center; color: #666;">No upcoming appointments scheduled</p>
+                {% endif %}
+            </div>
+            
+            <!-- Treatment Timeline Section -->
+            <div class="medical-info">
+                <h3>Treatment Timeline</h3>
+                <div class="timeline">
+                    {% if treatment_history %}
+                        {% for treatment in treatment_history %}
+                        <div class="timeline-item">
+                            <div class="timeline-date">{{ treatment.date }}</div>
+                            <div class="timeline-title">{{ treatment.title }}</div>
+                            <div class="timeline-content">{{ treatment.description }}</div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="text-align: center; color: #666;">No treatment history available</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Certificate History Section -->
+            <div class="certificate-history">
+                <h3>Certificate History</h3>
+                {% if certificate_history %}
+                    {% for cert in certificate_history %}
+                    <div class="certificate-item">
+                        <div class="certificate-date">{{ cert.date }}</div>
+                        <div>Type: {{ cert.type }}</div>
+                        <div>Issued By: {{ cert.doctor }}</div>
+                        <div>Purpose: {{ cert.purpose }}</div>
+                        <a href="{{ cert.link }}" style="color: #2c7be5; text-decoration: none;">View Certificate</a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="text-align: center; color: #666;">No previous certificates available</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="signature">
+                <img src="{{ url_for('static', filename='images/signature.png') }}" alt="Doctor's Signature">
+                <div style="font-weight: bold; color: #2c7be5;">Dr. {{ record.doctor_name }}</div>
+                <div class="signature-line"></div>
+                <div style="color: #555; font-size: 0.9em;">Authorized Signatory</div>
+            </div>
+        </div>
+
+        <div class="seal">
+            <div>
+                OFFICIAL SEAL<br>
+                {{ record.hospital_name }}<br>
+                CERTIFIED MEDICAL RECORD
+            </div>
+        </div>
+    </div>
+
+    <div class="no-print" style="text-align: center; margin: 20px;">
+        <button onclick="window.print()" style="padding: 12px 24px; background: linear-gradient(to right, #2c7be5, #3a86ff); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+            <i class="fas fa-print me-2"></i> Print Certificate
+        </button>
+    </div>
+</body>
+</html> 

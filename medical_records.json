@@ -1,0 +1,159 @@
+{
+    "UIN-20250308-3652": [
+        {
+            "record_id": "REC-20250308220941-e5f8f32d",
+            "hospital_id": "HOSP-20250308-ZV1QU3",
+            "hospital_name": "HHB",
+            "doctor_name": "dr xyz",
+            "diagnosis": "FEVER AND COUGH WITH BODY PAIN",
+            "treatment": "TREATED WITH GENERAL MEDINCE AS THERE IS NO SUCH SERIOUS CONDITIONS",
+            "medicines": "dolo 650\r\nCROCIN 300MG\r\nCOYGH CIRPU \r\nCIPLA VITAMIN TABLET",
+            "notes": "",
+            "timestamp": "2025-03-08 22:09:41"
+        },
+        {
+            "record_id": "REC-20250308221125-3a85ff6e",
+            "hospital_id": "HOSP-20250308-ZV1QU3",
+            "hospital_name": "HHB",
+            "doctor_name": "b",
+            "diagnosis": "v",
+            "treatment": "v",
+            "medicines": "vv",
+            "notes": "",
+            "timestamp": "2025-03-08 22:11:25"
+        },
+        {
+            "record_id": "REC-20250308230857-ba61cf23",
+            "hospital_id": "HOSP-20250308-P4NKHY",
+            "hospital_name": "Sidraj",
+            "doctor_name": "dr sidraj",
+            "diagnosis": "FEVER AND COUGH WITH BODY PAIN nad nothing",
+            "treatment": "nothing much",
+            "medicines": "dolo 650",
+            "notes": "",
+            "timestamp": "2025-03-08 23:08:57"
+        }
+    ],
+    "UIN-20250308-C6CG": [
+        {
+            "record_id": "REC-20250308230432-1d8717a1",
+            "hospital_id": "HOSP-20250308-03BJ6X",
+            "hospital_name": "abcd",
+            "doctor_name": "dr xyz",
+            "diagnosis": "FEVER AND COUGH WITH BODY PAIN",
+            "treatment": "vv",
+            "medicines": "v",
+            "notes": "v",
+            "timestamp": "2025-03-08 23:04:32"
+        }
+    ],
+    "UIN-20250309-GXKP": [
+        {
+            "record_id": "REC-20250309120527-638bf349",
+            "hospital_id": "HOSP-20250309-19VP5W",
+            "hospital_name": "ABHA",
+            "doctor_name": "dr xyz",
+            "diagnosis": "FEVER AND COUGH WITH BODY PAIN nad nothing",
+            "treatment": "n",
+            "medicines": "n",
+            "notes": "n",
+            "timestamp": "2025-03-09 12:05:27"
+        }
+    ],
+    "UIN-20250309-5QYC": [
+        {
+            "record_id": "REC-20250309151615-27ea767c",
+            "hospital_id": "HOSP-20250309-U19RFN",
+            "hospital_name": "jhgfdse",
+            "doctor_name": "jhgf",
+            "diagnosis": "dfghj",
+            "treatment": "ytr",
+            "medicines": "hgfdfghj",
+            "notes": "jhgfd",
+            "timestamp": "2025-03-09 15:16:15"
+        },
+        {
+            "record_id": "REC-20250309195054-08a364e6",
+            "hospital_id": "HOSP-20250309-9UNU0P",
+            "hospital_name": "ujhgfds,mnhgfd",
+            "doctor_name": "jhgf",
+            "diagnosis": "dfghj",
+            "treatment": "jhgf",
+            "medicines": "iuy",
+            "notes": "jhgf",
+            "timestamp": "2025-03-09 19:50:54"
+        }
+    ],
+    "UIN-20250309-LZO2": [
+        {
+            "record_id": "REC-20250309213041-d5dd781c",
+            "hospital_id": "HOSP-20250309-UL8R6Y",
+            "hospital_name": "nbgf",
+            "doctor_name": "fd",
+            "diagnosis": "fd",
+            "treatment": "nh",
+            "medicines": "g",
+            "notes": "g",
+            "timestamp": "2025-03-09 21:30:41"
+        }
+    ],
+    "UIN-20250309-NN3W": [
+        {
+            "record_id": "REC-20250309215659-d4132910",
+            "hospital_id": "HOSP-20250309-UL8R6Y",
+            "hospital_name": "nbgf",
+            "doctor_name": "me",
+            "diagnosis": "fever",
+            "treatment": "rest",
+            "medicines": "crocin",
+            "notes": "",
+            "timestamp": "2025-03-09 21:56:59"
+        }
+    ],
+    "UIN-20250309-5V1N": [
+        {
+            "record_id": "REC-20250309224829-f8ddfc23",
+            "hospital_id": "HOSP-20250309-EVTUKU",
+            "hospital_name": "bgfew",
+            "doctor_name": "dr mhgf",
+            "diagnosis": "hgf",
+            "treatment": "hgf",
+            "medicines": "fgh",
+            "notes": "jyt",
+            "timestamp": "2025-03-09 22:48:29"
+        },
+        {
+            "record_id": "REC-20250310004533-8ebe687f",
+            "hospital_id": "HOSP-20250309-EVTUKU",
+            "hospital_name": "bgfew",
+            "doctor_name": "man",
+            "diagnosis": "fever",
+            "treatment": "checkup done",
+            "medicines": "paracetamol-500\r\nvapourrub",
+            "notes": "take 1 day rest",
+            "timestamp": "2025-03-10 00:45:33",
+            "insurance_provider": "lic",
+            "policy_number": "653254",
+            "coverage_type": "all",
+            "insurance_valid_until": "2035-06-10",
+            "follow_up_date": "2025-03-13",
+            "follow_up_time": "12:00",
+            "follow_up_purpose": "checkup",
+            "treatment_history": [
+                {
+                    "date": "2025-02-27",
+                    "title": "fever",
+                    "description": "dolo"
+                }
+            ],
+            "certificate_history": [
+                {
+                    "date": "2025-03-01",
+                    "type": "hg",
+                    "doctor": "jhgf",
+                    "purpose": "jhgfd"
+                }
+            ]
+        }
+    ]
+}

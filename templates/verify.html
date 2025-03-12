@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Health Card</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #224abe;
+            --accent-color: #1cc88a;
+            --background-color: #f8f9fc;
+            --text-color: #2e384d;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 2rem;
+        }
+
+        .verification-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.1) 50%, transparent 55%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .verification-methods {
+            padding: 2rem;
+        }
+
+        .method-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .method-tab {
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            background: white;
+            border: 2px solid #e3e6f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .method-tab.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .method-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .verification-content {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e3e6f0;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+        }
+
+        #qr-reader {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #qr-reader__scan_region {
+            background: white;
+            padding: 1rem;
+        }
+
+        #qr-reader__dashboard {
+            padding: 1rem;
+            background: #f8f9fc;
+        }
+
+        .verification-help {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .help-card {
+            padding: 1.5rem;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .help-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .help-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Loading animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="verification-card">
+            <div class="card-header">
+                <h1 class="header-title">Verify Health Card</h1>
+                <p class="header-subtitle">Quick and secure verification of your Universal Health Card</p>
+            </div>
+
+            <div class="verification-methods">
+                <div class="method-tabs">
+                    <div class="method-tab active" data-method="uin">
+                        <i class="fas fa-id-card"></i>
+                        UIN Verification
+                    </div>
+                    <div class="method-tab" data-method="qr">
+                        <i class="fas fa-qrcode"></i>
+                        QR Code Scan
+                    </div>
+                </div>
+
+                <div class="verification-content">
+                    <div id="uin-verification" class="verification-method">
+                        <form action="{{ url_for('verify_card') }}" method="POST" id="verification-form">
+                            <div class="form-floating mb-4">
+                                <input type="text" class="form-control" id="uin" name="uin" placeholder="Enter UIN" required pattern="UIN-\d{8}-[A-Z0-9]{4}">
+                                <label for="uin">Enter UIN (Format: UIN-YYYYMMDD-XXXX)</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i>Verify Card
+                            </button>
+                        </form>
+                    </div>
+
+                    <div id="qr-verification" class="verification-method" style="display: none;">
+                        <div id="qr-reader"></div>
+                        <div id="qr-reader-results" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="verification-help">
+            <h3 class="text-center mb-4">Verification Help</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h5>Where to find UIN?</h5>
+                        <p>Your UIN is printed on the front of your health card in the format UIN-YYYYMMDD-XXXX.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <h5>QR Code Scanning</h5>
+                        <p>Simply point your device's camera at the QR code on the health card for instant verification.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <h5>Need Help?</h5>
+                        <p>Contact our support team for assistance with card verification.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Method switching
+        const methodTabs = document.querySelectorAll('.method-tab');
+        const verificationMethods = {
+            uin: document.getElementById('uin-verification'),
+            qr: document.getElementById('qr-verification')
+        };
+
+        methodTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update active tab
+                methodTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Show selected method
+                const method = tab.dataset.method;
+                Object.keys(verificationMethods).forEach(key => {
+                    verificationMethods[key].style.display = key === method ? 'block' : 'none';
+                });
+
+                // Initialize QR scanner if selected
+                if (method === 'qr' && !window.qrScanner) {
+                    initializeQRScanner();
+                }
+            });
+        });
+
+        // Form submission
+        const verificationForm = document.getElementById('verification-form');
+        const loadingOverlay = document.querySelector('.loading-overlay');
+
+        verificationForm.addEventListener('submit', (e) => {
+            loadingOverlay.style.display = 'flex';
+        });
+
+        // QR Code scanning
+        function initializeQRScanner() {
+            const html5QrcodeScanner = new Html5QrcodeScanner(
+                "qr-reader",
+                { fps: 10, qrbox: {width: 250, height: 250} }
+            );
+
+            function onScanSuccess(decodedText, decodedResult) {
+                // Parse the QR code data
+                const lines = decodedText.split('\n');
+                let uin = '';
+                
+                for (const line of lines) {
+                    if (line.startsWith('UIN:')) {
+                        uin = line.split(':')[1].trim();
+                        break;
+                    }
+                }
+
+                if (uin) {
+                    // Submit the UIN for verification
+                    document.getElementById('uin').value = uin;
+                    verificationForm.submit();
+                } else {
+                    alert('Invalid QR code format. Please try again.');
+                }
+            }
+
+            function onScanFailure(error) {
+                // Handle scan failure if needed
+            }
+
+            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+            window.qrScanner = html5QrcodeScanner;
+        }
+
+        // Add smooth animations to help cards
+        const helpCards = document.querySelectorAll('.help-card');
+        helpCards.forEach(card => {
+            card.addEventListener('mouseover', () => {
+                card.style.transform = 'translateY(-10px)';
+            });
+            card.addEventListener('mouseout', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html> 

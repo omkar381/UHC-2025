@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Result - Universal Health Card</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        :root[data-theme="light"] {
+            --primary-color: #4e73df;
+            --secondary-color: #224abe;
+            --accent-color: #1cc88a;
+            --background-color: #f8f9fc;
+            --card-bg: #ffffff;
+            --text-color: #2e384d;
+            --border-color: #e3e6f0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-color: rgba(78, 115, 223, 0.1);
+            --danger-color: #e74a3b;
+            --warning-color: #f6c23e;
+            --success-color: #1cc88a;
+        }
+
+        :root[data-theme="dark"] {
+            --primary-color: #4e73df;
+            --secondary-color: #224abe;
+            --accent-color: #1cc88a;
+            --background-color: #1a1c23;
+            --card-bg: #2a2d35;
+            --text-color: #e3e6f0;
+            --border-color: #404756;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --hover-color: rgba(78, 115, 223, 0.2);
+            --danger-color: #e74a3b;
+            --warning-color: #f6c23e;
+            --success-color: #1cc88a;
+        }
+
+        body {
+            background: var(--background-color);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 2rem;
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px var(--shadow-color);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-header::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.1) 50%, transparent 55%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        .verification-icon {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 3rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: scaleIn 0.5s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .verification-icon.success {
+            color: var(--success-color);
+        }
+
+        .verification-icon.error {
+            color: var(--danger-color);
+        }
+
+        .result-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-content {
+            padding: 2rem;
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            animation: slideIn 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            background: var(--background-color);
+            padding: 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge.active {
+            background: rgba(28, 200, 138, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-badge.expired {
+            background: rgba(231, 74, 59, 0.1);
+            color: var(--danger-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .verification-time {
+            margin-top: 2rem;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .user-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin: 0 auto 1.5rem;
+            overflow: hidden;
+            position: relative;
+            animation: scaleIn 0.5s ease;
+        }
+
+        .user-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .error-message .btn {
+            margin-top: 1.5rem;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--hover-color);
+            transform: rotate(360deg);
+        }
+        
+        /* Back to home button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        .back-button:hover {
+            background-color: var(--hover-color);
+            transform: translateX(-5px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle button -->
+    <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+    </button>
+    
+    <!-- Back to home button -->
+    <a href="{{ url_for('index') }}" class="back-button" title="Back to home">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <div class="container mt-5">
+        <div class="result-card">
+            {% if verified %}
+            <div class="result-header">
+                <div class="verification-icon success">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h1 class="result-title">Verification Successful</h1>
+                <p class="result-subtitle">The health card is valid and authentic</p>
+            </div>
+
+            <div class="result-content">
+                <div class="info-section" style="animation-delay: 0.2s;">
+                    <div class="text-center mb-4">
+                        <div class="user-photo">
+                            {% if photo_path %}
+                            <img src="{{ photo_path }}" alt="{{ name }}">
+                            {% else %}
+                            <i class="fas fa-user fa-3x"></i>
+                            {% endif %}
+                        </div>
+                        <h2>{{ name }}</h2>
+                        <div class="status-badge {{ 'active' if card_status == 'Active' else 'expired' }}">
+                            <i class="fas {{ 'fa-check-circle' if card_status == 'Active' else 'fa-times-circle' }}"></i>
+                            {{ card_status }}
+                        </div>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">UIN</div>
+                            <div class="info-value">{{ uin }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Date of Birth</div>
+                            <div class="info-value">{{ dob }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Issue Date</div>
+                            <div class="info-value">{{ created_at }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Expiry Date</div>
+                            <div class="info-value">{{ expiry_date }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="{{ url_for('user_profile', unique_id=unique_id) }}" class="btn btn-primary">
+                        <i class="fas fa-user"></i>
+                        View Full Profile
+                    </a>
+                    <a href="{{ url_for('verify_form') }}" class="btn btn-outline">
+                        <i class="fas fa-search"></i>
+                        Verify Another Card
+                    </a>
+                </div>
+
+                <div class="verification-time" id="verification-timestamp">
+                    Verification performed on {{ verification_time }}
+                </div>
+            </div>
+            {% else %}
+            <div class="result-header">
+                <div class="verification-icon error">
+                    <i class="fas fa-times"></i>
+                </div>
+                <h1 class="result-title">Verification Failed</h1>
+                <p class="result-subtitle">The health card could not be verified</p>
+            </div>
+
+            <div class="result-content">
+                <div class="error-message">
+                    <p>The provided UIN was not found in our system. Please check the UIN and try again.</p>
+                    <a href="{{ url_for('verify_form') }}" class="btn btn-primary">
+                        <i class="fas fa-redo"></i>
+                        Try Again
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Theme toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const icon = themeToggle.querySelector('i');
+            
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme === 'dark');
+
+            themeToggle.addEventListener('click', function() {
+                // Add transition class to body for smooth color changes
+                document.body.classList.add('transitioning');
+                
+                const isDark = html.getAttribute('data-theme') === 'dark';
+                const newTheme = isDark ? 'light' : 'dark';
+                
+                // Animate the toggle button
+                this.classList.add('animate__animated', 'animate__pulse');
+                
+                // Change the theme with a slight delay for better animation effect
+                setTimeout(() => {
+                    html.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    updateThemeIcon(!isDark);
+                    
+                    // Remove animation classes after they complete
+                    setTimeout(() => {
+                        this.classList.remove('animate__animated', 'animate__pulse');
+                        document.body.classList.remove('transitioning');
+                    }, 500);
+                }, 100);
+            });
+
+            function updateThemeIcon(isDark) {
+                if (isDark) {
+                    icon.className = 'fas fa-sun';
+                    themeToggle.setAttribute('title', 'Switch to light mode');
+                } else {
+                    icon.className = 'fas fa-moon';
+                    themeToggle.setAttribute('title', 'Switch to dark mode');
+                }
+            }
+            
+            // Add animation to other elements
+            const resultCard = document.querySelector('.result-card');
+            if (resultCard) {
+                resultCard.classList.add('animate__animated', 'animate__fadeIn');
+            }
+        });
+    </script>
+</body>
+</html> 

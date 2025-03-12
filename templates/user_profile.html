@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Universal Health Card</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #224abe;
+            --accent-color: #1cc88a;
+            --background-color: #f8f9fc;
+            --text-color: #2e384d;
+            --danger-color: #e74a3b;
+            --warning-color: #f6c23e;
+            --success-color: #1cc88a;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 2rem;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.1) 50%, transparent 55%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin: 0 auto 1.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-uin {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        .profile-content {
+            padding: 2rem;
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            background: var(--background-color);
+            padding: 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge.active {
+            background: rgba(28, 200, 138, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-badge.expired {
+            background: rgba(231, 74, 59, 0.1);
+            color: var(--danger-color);
+        }
+
+        .verification-history {
+            margin-top: 2rem;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+        }
+
+        .history-table th {
+            background: var(--background-color);
+            padding: 1rem;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .history-table td {
+            background: white;
+            padding: 1rem;
+        }
+
+        .history-table tr td:first-child {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .history-table tr td:last-child {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .method-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .method-badge.uin {
+            background: rgba(78, 115, 223, 0.1);
+            color: var(--primary-color);
+        }
+
+        .method-badge.qr {
+            background: rgba(28, 200, 138, 0.1);
+            color: var(--success-color);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            color: white;
+        }
+
+        .medical-records {
+            margin-top: 1.5rem;
+        }
+
+        .history-card {
+            background: var(--background-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .history-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .hospital-badge {
+            background: rgba(78, 115, 223, 0.1);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .timestamp {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .record-details {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .record-details strong {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="profile-card">
+            <div class="profile-header">
+                <a href="{{ url_for('index') }}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+                <div class="profile-photo">
+                    {% if user.photo_path %}
+                    <img src="{{ url_for('static', filename=user.photo_path) }}" alt="{{ user.name }}">
+                    {% else %}
+                    <i class="fas fa-user fa-3x"></i>
+                    {% endif %}
+                </div>
+                <h1 class="profile-name">{{ user.name }}</h1>
+                <div class="profile-uin">
+                    <i class="fas fa-fingerprint me-2"></i>{{ user.uin }}
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <div class="info-section">
+                    <h2 class="info-title">
+                        <i class="fas fa-info-circle"></i>
+                        Personal Information
+                    </h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Date of Birth</div>
+                            <div class="info-value">{{ user.dob }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Address</div>
+                            <div class="info-value">{{ user.address }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Phone</div>
+                            <div class="info-value">{{ user.phone }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">{{ user.email }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h2 class="info-title">
+                        <i class="fas fa-id-card"></i>
+                        Card Information
+                    </h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Card Status</div>
+                            <div class="info-value">
+                                <span class="status-badge {{ 'active' if card_status == 'Active' else 'expired' }}">
+                                    <i class="fas {{ 'fa-check-circle' if card_status == 'Active' else 'fa-times-circle' }}"></i>
+                                    {{ card_status }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Issue Date</div>
+                            <div class="info-value">{{ user.created_at }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Expiry Date</div>
+                            <div class="info-value">{{ user.expiry_date }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Days Until Expiry</div>
+                            <div class="info-value">{{ days_until_expiry if days_until_expiry > 0 else 'Expired' }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section verification-history">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="info-title mb-0">
+                            <i class="fas fa-history"></i>
+                            Verification History
+                        </h2>
+                        <a href="{{ url_for('download_verification_history', unique_id=user.unique_id) }}" class="download-btn">
+                            <i class="fas fa-download"></i>
+                            Download History
+                        </a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Method</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for verification in verification_history %}
+                                <tr>
+                                    <td>{{ verification.timestamp }}</td>
+                                    <td>
+                                        <span class="method-badge {{ verification.method }}">
+                                            <i class="fas {{ 'fa-id-card' if verification.method == 'uin' else 'fa-qrcode' }} me-1"></i>
+                                            {{ verification.method.upper() }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-check-circle text-success me-1"></i>
+                                        {{ verification.status.title() }}
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-center">No verification history available</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="info-title">
+                            <i class="fas fa-notes-medical"></i>
+                            Medical Records
+                        </h2>
+                        <a href="{{ url_for('download_medical_history', unique_id=user.unique_id) }}" class="download-btn">
+                            <i class="fas fa-download me-2"></i>
+                            Download Medical History
+                        </a>
+                    </div>
+                    <div class="medical-records">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Hospital</th>
+                                        <th>Doctor</th>
+                                        <th>Diagnosis</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for record in medical_records %}
+                                    <tr>
+                                        <td>{{ record.timestamp }}</td>
+                                        <td>{{ record.hospital_name }}</td>
+                                        <td>Dr. {{ record.doctor_name }}</td>
+                                        <td>{{ record.diagnosis }}</td>
+                                        <td>
+                                            <a href="{{ url_for('view_certificate', record_id=record.record_id) }}" class="btn btn-primary btn-sm" target="_blank">
+                                                <i class="fas fa-file-medical"></i> View Certificate
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

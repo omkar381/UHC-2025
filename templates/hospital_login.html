@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block title %}Hospital Login - Universal Health Card System{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 450px;
+        background: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: 0 8px 30px var(--shadow-color);
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+    .login-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px var(--shadow-color);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        padding: 2rem !important;
+    }
+
+    .card-header h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        animation: fadeInDown 0.5s ease 0.3s both;
+    }
+
+    .card-header p {
+        animation: fadeInUp 0.5s ease 0.5s both;
+        opacity: 0.9;
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-floating {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+        border: 2px solid var(--border-color);
+        padding: 0.75rem 1rem;
+        height: auto;
+        font-size: 1rem;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(44, 123, 229, 0.25);
+    }
+
+    .password-input-group {
+        position: relative;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--text-color);
+        padding: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+    }
+
+    .password-toggle:hover {
+        color: var(--primary-color);
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .btn-primary {
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        border: none;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transform: translateX(-100%);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(44, 123, 229, 0.3);
+    }
+
+    .btn-primary:hover::after {
+        animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+        100% { transform: translateX(100%); }
+    }
+
+    .btn-outline-primary {
+        font-weight: 500;
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+    }
+
+    .alert {
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border: none;
+        animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    @keyframes shake {
+        10%, 90% { transform: translate3d(-1px, 0, 0); }
+        20%, 80% { transform: translate3d(2px, 0, 0); }
+        30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+        40%, 60% { transform: translate3d(4px, 0, 0); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card animate__animated animate__fadeIn">
+        <div class="card-header text-white text-center">
+            <h2 class="animate__animated animate__fadeInDown">Hospital Login</h2>
+            <p class="mb-0 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">Access your hospital dashboard</p>
+        </div>
+        <div class="card-body p-4">
+            <div id="loginAlert" class="alert alert-danger d-none" role="alert"></div>
+            <form id="loginForm" action="{{ url_for('hospital_login') }}" method="POST">
+                <div class="form-floating animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+                    <input type="text" class="form-control" id="hospital_id" name="hospital_id" placeholder="Enter Hospital ID" required>
+                    <label for="hospital_id">Hospital ID</label>
+                </div>
+                <div class="form-floating animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                    <div class="password-input-group">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                        <label for="password">Password</label>
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-4 animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </button>
+                    <a href="{{ url_for('hospital_register') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-hospital-alt me-2"></i>Register New Hospital
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const toggleButton = document.querySelector('.password-toggle i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleButton.classList.remove('fa-eye');
+        toggleButton.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        toggleButton.classList.remove('fa-eye-slash');
+        toggleButton.classList.add('fa-eye');
+    }
+}
+
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const alertBox = document.getElementById('loginAlert');
+    alertBox.classList.add('d-none');
+    
+    // Get the login button and add loading state
+    const loginButton = this.querySelector('button[type="submit"]');
+    const originalText = loginButton.innerHTML;
+    loginButton.disabled = true;
+    loginButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Logging in...';
+    
+    try {
+        const formData = new FormData(this);
+        const response = await fetch('{{ url_for("hospital_login") }}', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.verified) {
+            // Add a success message before redirecting
+            loginButton.innerHTML = '<i class="fas fa-check-circle me-2"></i>Success!';
+            loginButton.classList.add('btn-success');
+            
+            // Redirect after a short delay
+            setTimeout(() => {
+                window.location.href = `/hospital_dashboard/${result.hospital_id}`;
+            }, 800);
+        } else {
+            // Reset button and show error
+            loginButton.disabled = false;
+            loginButton.innerHTML = originalText;
+            alertBox.textContent = result.message;
+            alertBox.classList.remove('d-none');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        // Reset button and show error
+        loginButton.disabled = false;
+        loginButton.innerHTML = originalText;
+        alertBox.textContent = 'An error occurred during login. Please try again.';
+        alertBox.classList.remove('d-none');
+    }
+});
+</script>
+{% endblock %} 

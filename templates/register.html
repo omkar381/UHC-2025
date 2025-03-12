@@ -1,0 +1,729 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Registration - Universal Health Card System{% endblock %}
+
+{% block extra_css %}
+    <style>
+    .registration-card {
+        background: var(--card-bg);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px var(--shadow-color);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+    }
+
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        margin: 2rem;
+        position: relative;
+    }
+
+    .progress-line {
+        position: absolute;
+        top: 20px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--border-color);
+        z-index: 0;
+    }
+
+    .progress-line-fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background: var(--primary-color);
+        transition: width 0.3s ease;
+    }
+
+    .progress-step {
+        flex: 1;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        background: var(--card-bg);
+        border: 2px solid var(--border-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.5rem;
+        font-weight: 600;
+        color: var(--text-color);
+        transition: all 0.3s ease;
+    }
+
+    .progress-step.active .step-number {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+    }
+
+    .step-label {
+        font-size: 0.9rem;
+        color: var(--text-color);
+        transition: all 0.3s ease;
+    }
+
+    .progress-step.active .step-label {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    .camera-section {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid var(--border-color);
+    }
+
+    #camera-container {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+        border-radius: 15px;
+            overflow: hidden;
+        box-shadow: 0 10px 20px var(--shadow-color);
+        position: relative;
+    }
+
+    #video, #canvas, #captured-photo {
+        width: 100%;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .camera-overlay {
+        position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        border: 2px solid var(--primary-color);
+        border-radius: 15px;
+        pointer-events: none;
+    }
+
+    .verification-section {
+        background: rgba(var(--primary-color-rgb), 0.05);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid var(--border-color);
+    }
+
+    .form-section {
+        padding: 2rem;
+    }
+
+    .form-floating {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        border: 2px solid var(--border-color);
+        padding: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb), 0.25);
+    }
+
+    .camera-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .btn-camera {
+        flex: 1;
+        padding: 0.8rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-camera:hover {
+        transform: translateY(-2px);
+    }
+
+    .password-section {
+        margin-bottom: 2rem;
+    }
+
+    .password-requirements {
+        font-size: 0.9rem;
+        color: var(--text-color);
+        margin-top: 1rem;
+    }
+
+    .requirement-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .requirement-icon {
+        margin-right: 0.5rem;
+        color: var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+    .requirement-icon.valid {
+        color: var(--accent-color);
+    }
+
+    .review-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+    .review-content {
+        background: var(--card-bg);
+        padding: 2rem;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 500px;
+        width: 90%;
+        position: relative;
+        animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .review-icon {
+        font-size: 4rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .review-progress {
+        width: 100%;
+        height: 4px;
+        background: var(--border-color);
+        margin: 1.5rem 0;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .review-progress-bar {
+        width: 0;
+        height: 100%;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        transition: width 0.5s ease;
+    }
+
+    .review-steps {
+        text-align: left;
+        margin: 1.5rem 0;
+    }
+
+    .review-step {
+        display: flex;
+        align-items: center;
+        margin: 0.5rem 0;
+        opacity: 0.5;
+        transition: opacity 0.3s ease;
+    }
+
+    .review-step.active {
+        opacity: 1;
+    }
+
+    .review-step i {
+        margin-right: 0.5rem;
+        color: var(--accent-color);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Verification Section -->
+    <div class="verification-section mb-4">
+        <h3 class="text-center mb-4">Verify Your ID</h3>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="input-group mb-3">
+                    <input type="text" id="verificationId" class="form-control" placeholder="Enter your Verification ID">
+                    <button class="btn btn-primary" type="button" onclick="verifyId()">Verify ID</button>
+                </div>
+                <div id="verificationResult" class="alert" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Form -->
+        <div class="registration-card">
+        <div class="card-header bg-primary text-white text-center py-4">
+            <h2 class="mb-0">Universal Health Card Registration</h2>
+            <p class="mb-0">Your gateway to seamless healthcare access</p>
+        </div>
+
+        <div class="progress-steps">
+            <div class="progress-line">
+                <div class="progress-line-fill" style="width: 0%"></div>
+            </div>
+            <div class="progress-step active">
+                <div class="step-number">1</div>
+                <div class="step-label">Verification</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">2</div>
+                <div class="step-label">Personal Info</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">3</div>
+                <div class="step-label">Photo</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">4</div>
+                <div class="step-label">Password</div>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data" class="needs-validation" novalidate id="registration-form">
+            <div class="form-section">
+                <!-- Verification Section -->
+                <div class="verification-section">
+                    <h4 class="mb-3">Verification ID</h4>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="verification_id" name="verification_id" placeholder="Enter verification ID" required>
+                        <label for="verification_id">Verification ID</label>
+                        <div class="invalid-feedback">Please enter your verification ID.</div>
+                        </div>
+                    <div class="text-end">
+                        <a href="{{ url_for('generate_verification') }}" class="text-primary">
+                            <i class="fas fa-key me-1"></i>Generate new verification ID
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Personal Information -->
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Full Name" required>
+                            <label for="name">Full Name</label>
+                            <div class="invalid-feedback">Please enter your full name.</div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control" id="dob" name="dob" required>
+                            <label for="dob">Date of Birth</label>
+                            <div class="invalid-feedback">Please select your date of birth.</div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="address" name="address" placeholder="Address" style="height: 100px" required></textarea>
+                            <label for="address">Address</label>
+                            <div class="invalid-feedback">Please enter your address.</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone Number" required>
+                            <label for="phone">Phone Number</label>
+                            <div class="invalid-feedback">Please enter your phone number.</div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                            <label for="email">Email</label>
+                            <div class="invalid-feedback">Please enter a valid email address.</div>
+                        </div>
+                        <div class="password-section">
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                <label for="password">Password</label>
+                                <div class="invalid-feedback">Please enter a password.</div>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+                                <label for="confirm_password">Confirm Password</label>
+                                <div class="invalid-feedback">Please confirm your password.</div>
+                            </div>
+                            <div class="password-requirements">
+                                <div class="requirement-item">
+                                    <i class="fas fa-check-circle requirement-icon" id="length-check"></i>
+                                    At least 8 characters
+                                </div>
+                                <div class="requirement-item">
+                                    <i class="fas fa-check-circle requirement-icon" id="uppercase-check"></i>
+                                    One uppercase letter
+                                </div>
+                                <div class="requirement-item">
+                                    <i class="fas fa-check-circle requirement-icon" id="number-check"></i>
+                                    One number
+                                </div>
+                                <div class="requirement-item">
+                                    <i class="fas fa-check-circle requirement-icon" id="special-check"></i>
+                                    One special character
+                                </div>
+                                <div class="requirement-item">
+                                    <i class="fas fa-check-circle requirement-icon" id="match-check"></i>
+                                    Passwords match
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                <!-- Photo Capture Section -->
+                <div class="camera-section">
+                    <h4 class="mb-3">Photo Capture</h4>
+                    <div id="camera-container">
+                        <video id="video" autoplay playsinline></video>
+                        <canvas id="canvas" style="display:none;"></canvas>
+                        <img id="captured-photo" style="display:none;">
+                        <div class="camera-overlay"></div>
+                    </div>
+                    <input type="hidden" name="photo_data" id="photo_data">
+                    <div class="camera-buttons">
+                        <button type="button" id="start-camera" class="btn btn-secondary btn-camera">
+                            <i class="fas fa-camera me-2"></i>Start Camera
+                        </button>
+                        <button type="button" id="capture-photo" class="btn btn-primary btn-camera" disabled>
+                            <i class="fas fa-camera-retro me-2"></i>Capture Photo
+                        </button>
+                        <button type="button" id="retake-photo" class="btn btn-warning btn-camera" style="display:none;">
+                            <i class="fas fa-redo me-2"></i>Retake
+                        </button>
+                    </div>
+                    </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-user-plus me-2"></i>Complete Registration
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+    // Form validation
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+
+    // Progress steps
+    let currentStep = 0;
+    const progressSteps = document.querySelectorAll('.progress-step');
+    const progressLineFill = document.querySelector('.progress-line-fill');
+
+    function updateProgress(step) {
+        currentStep = step;
+        progressLineFill.style.width = `${(step / (progressSteps.length - 1)) * 100}%`;
+        progressSteps.forEach((stepEl, index) => {
+            if (index <= step) {
+                stepEl.classList.add('active');
+            } else {
+                stepEl.classList.remove('active');
+            }
+        });
+    }
+
+    // Camera functionality
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const capturedPhoto = document.getElementById('captured-photo');
+    const startCameraBtn = document.getElementById('start-camera');
+    const capturePhotoBtn = document.getElementById('capture-photo');
+    const retakePhotoBtn = document.getElementById('retake-photo');
+    const photoDataInput = document.getElementById('photo_data');
+    let stream = null;
+
+    startCameraBtn.addEventListener('click', async () => {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            startCameraBtn.disabled = true;
+            capturePhotoBtn.disabled = false;
+            video.style.display = 'block';
+            capturedPhoto.style.display = 'none';
+            updateProgress(2);
+        } catch (err) {
+            console.error('Error accessing camera:', err);
+            alert('Could not access camera. Please ensure you have a camera connected and have granted permission.');
+        }
+    });
+
+    capturePhotoBtn.addEventListener('click', () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const photoData = canvas.toDataURL('image/jpeg');
+        capturedPhoto.src = photoData;
+        photoDataInput.value = photoData;
+        
+        video.style.display = 'none';
+        capturedPhoto.style.display = 'block';
+        capturePhotoBtn.style.display = 'none';
+        retakePhotoBtn.style.display = 'block';
+        
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+        updateProgress(3);
+    });
+
+    retakePhotoBtn.addEventListener('click', async () => {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            video.style.display = 'block';
+            capturedPhoto.style.display = 'none';
+            capturePhotoBtn.style.display = 'inline-block';
+            retakePhotoBtn.style.display = 'none';
+            updateProgress(2);
+        } catch (err) {
+            console.error('Error restarting camera:', err);
+        }
+    });
+
+    // Password validation
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm_password');
+    const lengthCheck = document.getElementById('length-check');
+    const uppercaseCheck = document.getElementById('uppercase-check');
+    const numberCheck = document.getElementById('number-check');
+    const specialCheck = document.getElementById('special-check');
+    const matchCheck = document.getElementById('match-check');
+
+    function validatePassword() {
+        const pwd = password.value;
+        const confirmPwd = confirmPassword.value;
+
+        // Length check
+        if (pwd.length >= 8) {
+            lengthCheck.classList.add('valid');
+        } else {
+            lengthCheck.classList.remove('valid');
+        }
+
+        // Uppercase check
+        if (/[A-Z]/.test(pwd)) {
+            uppercaseCheck.classList.add('valid');
+        } else {
+            uppercaseCheck.classList.remove('valid');
+        }
+
+        // Number check
+        if (/[0-9]/.test(pwd)) {
+            numberCheck.classList.add('valid');
+        } else {
+            numberCheck.classList.remove('valid');
+        }
+
+        // Special character check
+        if (/[!@#$%^&*]/.test(pwd)) {
+            specialCheck.classList.add('valid');
+        } else {
+            specialCheck.classList.remove('valid');
+        }
+
+        // Match check
+        if (pwd === confirmPwd && pwd !== '') {
+            matchCheck.classList.add('valid');
+        } else {
+            matchCheck.classList.remove('valid');
+        }
+
+        // Update progress if all requirements are met
+        if (document.querySelectorAll('.requirement-icon.valid').length === 5) {
+            updateProgress(4);
+        }
+    }
+
+    password.addEventListener('input', validatePassword);
+    confirmPassword.addEventListener('input', validatePassword);
+
+    // Verification ID check
+    document.getElementById('verification_id').addEventListener('input', function() {
+        if (this.value) {
+            updateProgress(1);
+        } else {
+            updateProgress(0);
+        }
+    });
+
+    document.getElementById('registration-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Show review overlay
+        const reviewOverlay = document.createElement('div');
+        reviewOverlay.className = 'review-overlay';
+        reviewOverlay.innerHTML = `
+            <div class="review-content">
+                <i class="fas fa-clipboard-check review-icon"></i>
+                <h3>Reviewing Your Application</h3>
+                <p>Please wait while we process your registration...</p>
+                
+                <div class="review-progress">
+                    <div class="review-progress-bar"></div>
+                </div>
+                
+                <div class="review-steps">
+                    <div class="review-step" data-step="1">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Validating information</span>
+                    </div>
+                    <div class="review-step" data-step="2">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Processing documents</span>
+                    </div>
+                    <div class="review-step" data-step="3">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Generating health card</span>
+                    </div>
+                    <div class="review-step" data-step="4">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Finalizing registration</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(reviewOverlay);
+        reviewOverlay.style.display = 'flex';
+        
+        // Animate progress bar and steps
+        const progressBar = reviewOverlay.querySelector('.review-progress-bar');
+        const steps = reviewOverlay.querySelectorAll('.review-step');
+        let progress = 0;
+        
+        function updateProgress(step) {
+            const stepProgress = step * 25;
+            progressBar.style.width = `${stepProgress}%`;
+            steps.forEach((s, i) => {
+                if (i < step) s.classList.add('active');
+            });
+        }
+        
+        try {
+            // Submit form data
+            const formData = new FormData(this);
+            const response = await fetch('/register', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                // Simulate review process
+                updateProgress(1);
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                updateProgress(2);
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                updateProgress(3);
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                updateProgress(4);
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Check registration status and redirect
+                const statusResponse = await fetch(`/registration_status/${result.unique_id}`);
+                const statusResult = await statusResponse.json();
+                
+                if (statusResult.status === 'success') {
+                    window.location.href = statusResult.redirect_url;
+                } else {
+                    throw new Error(statusResult.message);
+                }
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            alert('Registration failed: ' + error.message);
+            reviewOverlay.remove();
+        }
+    });
+
+    function verifyId() {
+        const verificationId = document.getElementById('verificationId').value.trim();
+        if (!verificationId) {
+            showVerificationResult('Please enter a verification ID', false);
+            return;
+        }
+
+        fetch(`/get-verification-data/${verificationId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    showVerificationResult(data.error, false);
+                } else {
+                    showVerificationResult('Verification successful! You can now proceed with registration.', true);
+                    // Auto-fill form fields with verified data
+                    document.getElementById('name').value = data.fullName;
+                    document.getElementById('dob').value = data.dob;
+                    document.getElementById('address').value = data.address;
+                    document.getElementById('phone').value = data.mobile;
+                }
+            })
+            .catch(error => {
+                showVerificationResult('Error verifying ID. Please try again.', false);
+            });
+    }
+
+    function showVerificationResult(message, success) {
+        const resultDiv = document.getElementById('verificationResult');
+        resultDiv.innerHTML = message;
+        resultDiv.className = 'alert ' + (success ? 'alert-success' : 'alert-danger');
+        resultDiv.style.display = 'block';
+    }
+    </script>
+{% endblock %}

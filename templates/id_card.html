@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Universal Health Card</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fc;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 850px;
+        }
+        
+        .id-card-container {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            margin: 30px auto;
+            max-width: 750px;
+        }
+        
+        .id-card {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            page-break-inside: avoid;
+        }
+        
+        .id-card-header {
+            height: 80px;
+            background: linear-gradient(to right, #4e73df, #224abe);
+            padding: 15px 20px;
+            color: white;
+            position: relative;
+        }
+        
+        .id-card-logo {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .id-card-logo i {
+            font-size: 2.5rem;
+            margin-right: 10px;
+        }
+        
+        .id-card-logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .id-card-logo-text small {
+            font-size: 0.7rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        
+        .id-card-title {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: right;
+        }
+        
+        .id-card-body {
+            padding: 20px;
+            display: flex;
+        }
+        
+        .id-card-photo {
+            width: 130px;
+            height: 160px;
+            border: 5px solid #4e73df;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-right: 20px;
+            background-color: #f1f3f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .id-card-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .id-card-details {
+            flex: 1;
+        }
+        
+        .id-card-detail {
+            margin-bottom: 10px;
+        }
+        
+        .id-card-label {
+            font-size: 0.7rem;
+            color: #6c757d;
+            margin-bottom: 2px;
+        }
+        
+        .id-card-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2e384d;
+        }
+        
+        .id-card-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 20px;
+            background-color: #f8f9fc;
+            border-top: 1px solid #e3e6f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .id-card-qr {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #e3e6f0;
+        }
+        
+        .id-card-qr img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .id-card-signature {
+            text-align: center;
+            margin-right: 20px;
+        }
+        
+        .signature-line {
+            width: 150px;
+            height: 1px;
+            background-color: #2e384d;
+            margin: 5px 0;
+        }
+        
+        .id-card-validity {
+            text-align: right;
+            font-size: 0.8rem;
+        }
+        
+        .id-card-validity .valid-text {
+            font-weight: 600;
+            color: #28a745;
+        }
+        
+        .id-card-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            color: rgba(78, 115, 223, 0.05);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .print-button {
+            background: linear-gradient(to right, #4e73df, #224abe);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(78, 115, 223, 0.4);
+            transition: all 0.3s;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        .print-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(78, 115, 223, 0.6);
+            background: linear-gradient(to right, #3a5ccc, #1a3ba0);
+        }
+        
+        .pdf-button {
+            background: linear-gradient(to right, #28a745, #218838);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+            transition: all 0.3s;
+            margin: 10px auto;
+            display: block;
+            color: white;
+        }
+        
+        .pdf-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.6);
+            background: linear-gradient(to right, #218838, #1e7e34);
+            color: white;
+        }
+        
+        .uin-highlight {
+            background-color: #e8f0fe;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid #4e73df;
+            display: inline-block;
+        }
+        
+        .security-features {
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            right: 20px;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                #ff0000 0%, #ff0000 10%, 
+                #00ff00 10%, #00ff00 20%, 
+                #0000ff 20%, #0000ff 30%, 
+                #ff0000 30%, #ff0000 40%, 
+                #00ff00 40%, #00ff00 50%, 
+                #0000ff 50%, #0000ff 60%, 
+                #ff0000 60%, #ff0000 70%, 
+                #00ff00 70%, #00ff00 80%, 
+                #0000ff 80%, #0000ff 90%, 
+                #ff0000 90%, #ff0000 100%);
+            border-radius: 2px;
+        }
+        
+        .hologram {
+            position: absolute;
+            top: 100px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, 
+                rgba(255,255,255,0.9) 0%, 
+                rgba(255,255,255,0.5) 25%, 
+                rgba(255,255,255,0.3) 50%, 
+                rgba(255,255,255,0.1) 75%, 
+                rgba(255,255,255,0) 100%);
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .container {
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .id-card-container {
+                box-shadow: none;
+                margin: 0;
+                max-width: 100%;
+            }
+            
+            .id-card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .print-button, .pdf-button, .back-button, .verify-button {
+                display: none;
+            }
+            
+            .page-break {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="text-primary">Universal Health Card</h2>
+            <p class="text-muted">Your official health identification document</p>
+        </div>
+        
+        <div class="id-card-container">
+            <div class="id-card">
+                <!-- Watermark -->
+                <div class="id-card-watermark">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                
+                <!-- Security hologram -->
+                <div class="hologram"></div>
+                
+                <!-- Header -->
+                <div class="id-card-header">
+                    <div class="id-card-logo">
+                        <i class="fas fa-heartbeat"></i>
+                        <div class="id-card-logo-text">
+                            Universal Health<br>
+                            <small>NATIONAL HEALTH PROGRAM</small>
+                        </div>
+                    </div>
+                    <div class="id-card-title">
+                        HEALTH CARD
+                    </div>
+                </div>
+                
+                <!-- Body -->
+                <div class="id-card-body">
+                    <!-- Photo -->
+                    <div class="id-card-photo">
+                        {% if photo_path %}
+                        <img src="{{ photo_path }}" alt="User Photo">
+                        {% else %}
+                        <i class="fas fa-user fa-4x text-secondary"></i>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Details -->
+                    <div class="id-card-details">
+                        <div class="id-card-detail">
+                            <div class="id-card-label">FULL NAME</div>
+                            <div class="id-card-value">{{ name }}</div>
+                        </div>
+                        
+                        <div class="id-card-detail">
+                            <div class="id-card-label">DATE OF BIRTH</div>
+                            <div class="id-card-value">{{ dob }}</div>
+                        </div>
+                        
+                        <div class="id-card-detail">
+                            <div class="id-card-label">UIN</div>
+                            <div class="id-card-value uin-highlight">{{ uin }}</div>
+                        </div>
+                        
+                        <div class="id-card-detail">
+                            <div class="id-card-label">ADDRESS</div>
+                            <div class="id-card-value" style="font-size: 0.8rem;">{{ address }}</div>
+                        </div>
+                        
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <div class="id-card-detail">
+                                    <div class="id-card-label">PHONE</div>
+                                    <div class="id-card-value">{{ phone }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="id-card-detail">
+                                    <div class="id-card-label">EMAIL</div>
+                                    <div class="id-card-value" style="font-size: 0.8rem;">{{ email }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Security strip -->
+                <div class="security-features"></div>
+                
+                <!-- Footer -->
+                <div class="id-card-footer">
+                    <div class="id-card-qr">
+                        <img src="{{ qr_path }}" alt="QR Code">
+                    </div>
+                    
+                    <div class="id-card-signature">
+                        <div class="signature-line"></div>
+                        <div class="small">Authorized Signature</div>
+                    </div>
+                    
+                    <div class="id-card-validity">
+                        <div>Issue Date: {{ created_at }}</div>
+                        <div>Expiry Date: {{ expiry_date }}</div>
+                        <div class="valid-text">VALID FOR 5 YEARS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button onclick="window.print()" class="btn print-button">
+                <i class="fas fa-print me-2"></i> Print ID Card
+            </button>
+            
+            <a href="{{ url_for('download_pdf', unique_id=unique_id) }}" class="btn pdf-button">
+                <i class="fas fa-file-pdf me-2"></i> Download PDF
+            </a>
+        </div>
+        
+        <div class="text-center mt-3">
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary back-button">
+                <i class="fas fa-arrow-left me-2"></i> Back to Home
+            </a>
+            
+            <a href="{{ url_for('verify_form') }}" class="btn btn-outline-primary ms-2 verify-button">
+                <i class="fas fa-shield-alt me-2"></i> Verify Card
+            </a>
+        </div>
+        
+        <div class="alert alert-info mt-4">
+            <div class="d-flex">
+                <div class="me-3">
+                    <i class="fas fa-info-circle fa-2x text-primary"></i>
+                </div>
+                <div>
+                    <h5 class="alert-heading">Important Information</h5>
+                    <p>This card is your official Universal Health identification. Keep it safe and present it when accessing healthcare services.</p>
+                    <p class="mb-0">Your UIN (Unique Identification Number) is <strong>{{ uin }}</strong>. Use this number for all future correspondence.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

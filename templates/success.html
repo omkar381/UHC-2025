@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ID Card Generated</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            border: none;
+        }
+        .card-header {
+            background: linear-gradient(to right, #4e73df, #224abe);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        .card-body {
+            padding: 30px;
+        }
+        .user-photo {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #4e73df;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .user-info {
+            margin-top: 20px;
+        }
+        .info-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #e8f0fe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #4e73df;
+        }
+        .qr-code {
+            max-width: 150px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: white;
+            border-radius: 10px;
+        }
+        .btn-download {
+            background: linear-gradient(to right, #4e73df, #224abe);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(78, 115, 223, 0.4);
+            transition: all 0.3s;
+        }
+        .btn-download:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(78, 115, 223, 0.6);
+            background: linear-gradient(to right, #3a5ccc, #1a3ba0);
+        }
+        .btn-pdf {
+            background: linear-gradient(to right, #28a745, #218838);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+            transition: all 0.3s;
+            color: white;
+        }
+        .btn-pdf:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.6);
+            background: linear-gradient(to right, #218838, #1e7e34);
+            color: white;
+        }
+        .success-message {
+            color: #28a745;
+            font-weight: 600;
+            margin-bottom: 20px;
+            animation: fadeIn 1s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .uin-badge {
+            background-color: #e8f0fe;
+            border: 1px solid #4e73df;
+            color: #4e73df;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .features-list {
+            margin-top: 30px;
+            border-top: 1px solid #e3e6f0;
+            padding-top: 20px;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(78, 115, 223, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #4e73df;
+        }
+        .expiry-info {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-check-circle me-2"></i> Universal Health Card Generated Successfully
+            </div>
+            <div class="card-body">
+                <div class="text-center success-message">
+                    <i class="fas fa-check-circle me-2"></i> Your health card has been created successfully!
+                    <div class="uin-badge mt-2">
+                        <i class="fas fa-fingerprint me-2"></i> UIN: {{ uin }}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        {% if photo_path %}
+                        <img src="{{ photo_path }}" alt="User Photo" class="user-photo mb-3">
+                        {% else %}
+                        <div class="user-photo mb-3 d-flex align-items-center justify-content-center bg-light">
+                            <i class="fas fa-user fa-4x text-secondary"></i>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="qr-code mt-3">
+                            <img src="{{ qr_path }}" alt="QR Code" class="img-fluid">
+                            <div class="small text-muted mt-2">Scan to verify</div>
+                        </div>
+                        
+                        <div class="expiry-info mt-3">
+                            <div><i class="fas fa-calendar-check me-2"></i> Valid until: {{ expiry_date }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <h4 class="mb-4 text-primary">Card Details</h4>
+                        
+                        <div class="user-info">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">Full Name</div>
+                                    <div class="fw-bold">{{ name }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">Date of Birth</div>
+                                    <div class="fw-bold">{{ dob }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">Address</div>
+                                    <div class="fw-bold">{{ address }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">Phone</div>
+                                    <div class="fw-bold">{{ phone }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">Email</div>
+                                    <div class="fw-bold">{{ email }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-fingerprint"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">UIN</div>
+                                    <div class="fw-bold">{{ uin }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">Card ID</div>
+                                    <div class="fw-bold">{{ unique_id }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <a href="{{ url_for('generate_card', unique_id=unique_id) }}" class="btn btn-download">
+                        <i class="fas fa-id-card me-2"></i> View ID Card
+                    </a>
+                    
+                    <a href="{{ url_for('download_pdf', unique_id=unique_id) }}" class="btn btn-pdf">
+                        <i class="fas fa-file-pdf me-2"></i> Download PDF
+                    </a>
+                </div>
+                
+                <div class="features-list">
+                    <h5 class="mb-3">Card Features</h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Secure QR Verification</h6>
+                                    <p class="mb-0 small text-muted">Scan the QR code to verify authenticity</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-fingerprint"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Unique Identification</h6>
+                                    <p class="mb-0 small text-muted">UIN ensures unique identification</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">PDF Download</h6>
+                                    <p class="mb-0 small text-muted">Download your card as PDF</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-print"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Print Ready</h6>
+                                    <p class="mb-0 small text-muted">Optimized for high-quality printing</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-home me-2"></i> Back to Home
+                    </a>
+                    
+                    <a href="{{ url_for('verify_form') }}" class="btn btn-outline-primary ms-2">
+                        <i class="fas fa-shield-alt me-2"></i> Verify Card
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

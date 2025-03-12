@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Registration - Universal Health Card</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #224abe;
+            --accent-color: #1cc88a;
+            --background-color: #f8f9fc;
+            --text-color: #2e384d;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 2rem;
+        }
+
+        .registration-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.1) 50%, transparent 55%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-section {
+            padding: 2rem;
+        }
+
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e3e6f0;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+        }
+
+        .features-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card {
+            padding: 1.5rem;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: 600;
+        }
+
+        .password-strength {
+            height: 5px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            margin-top: 5px;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0;
+            border-radius: 3px;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .strength-weak { background-color: #dc3545; width: 25%; }
+        .strength-fair { background-color: #ffc107; width: 50%; }
+        .strength-good { background-color: #28a745; width: 75%; }
+        .strength-strong { background-color: #198754; width: 100%; }
+    </style>
+    <script>
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthBar = document.querySelector('.strength-bar');
+            const strengthText = document.getElementById('password-strength-text');
+            
+            // Remove previous strength classes
+            strengthBar.className = 'strength-bar';
+            
+            if (password.length === 0) {
+                strengthText.textContent = 'Password strength: Too weak';
+                return;
+            }
+            
+            let strength = 0;
+            
+            // Check password length
+            if (password.length >= 8) strength += 1;
+            if (password.length >= 12) strength += 1;
+            
+            // Check for mixed case
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength += 1;
+            
+            // Check for numbers
+            if (password.match(/\d/)) strength += 1;
+            
+            // Check for special characters
+            if (password.match(/[^a-zA-Z\d]/)) strength += 1;
+            
+            switch (strength) {
+                case 0:
+                    strengthBar.classList.add('strength-weak');
+                    strengthText.textContent = 'Password strength: Too weak';
+                    break;
+                case 2:
+                    strengthBar.classList.add('strength-fair');
+                    strengthText.textContent = 'Password strength: Fair';
+                    break;
+                case 3:
+                    strengthBar.classList.add('strength-good');
+                    strengthText.textContent = 'Password strength: Good';
+                    break;
+                case 4:
+                case 5:
+                    strengthBar.classList.add('strength-strong');
+                    strengthText.textContent = 'Password strength: Strong';
+                    break;
+                default:
+                    strengthBar.classList.add('strength-weak');
+                    strengthText.textContent = 'Password strength: Weak';
+            }
+        }
+
+        function checkPasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            const matchText = document.getElementById('password-match');
+            
+            if (confirmPassword.length > 0) {
+                matchText.style.display = 'block';
+                if (password === confirmPassword) {
+                    matchText.textContent = 'Passwords match';
+                    matchText.className = 'text-success';
+                } else {
+                    matchText.textContent = 'Passwords do not match';
+                    matchText.className = 'text-danger';
+                }
+            } else {
+                matchText.style.display = 'none';
+            }
+        }
+
+        // Add form validation for password match
+        document.getElementById('hospital-form').addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="registration-card">
+            <div class="card-header">
+                <h1 class="header-title">Hospital Registration</h1>
+                <p class="header-subtitle">Join the Universal Health Card network</p>
+            </div>
+
+            <form action="{{ url_for('register_hospital') }}" method="POST" id="hospital-form">
+                <div class="form-section">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Hospital Name" required>
+                                <label for="name">Hospital Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" id="address" name="address" placeholder="Address" style="height: 100px" required></textarea>
+                                <label for="address">Address</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone Number" required>
+                                <label for="phone">Phone Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                                <label for="email">Email</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required onkeyup="checkPasswordStrength()">
+                                <label for="password">Password</label>
+                            </div>
+                            <div class="mb-3">
+                                <div class="password-strength" id="password-strength">
+                                    <div class="strength-bar"></div>
+                                </div>
+                                <small class="text-muted" id="password-strength-text">Password strength: Too weak</small>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required onkeyup="checkPasswordMatch()">
+                                <label for="confirm_password">Confirm Password</label>
+                            </div>
+                            <div class="mb-3">
+                                <small class="text-danger" id="password-match" style="display: none;">Passwords do not match</small>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select class="form-control" id="specialization" name="specialization" required>
+                                    <option value="" disabled selected>Select Specialization</option>
+                                    <option value="General Medicine">General Medicine</option>
+                                    <option value="Cardiology">Cardiology</option>
+                                    <option value="Orthopedics">Orthopedics</option>
+                                    <option value="Pediatrics">Pediatrics</option>
+                                    <option value="Neurology">Neurology</option>
+                                    <option value="Oncology">Oncology</option>
+                                    <option value="Gynecology">Gynecology</option>
+                                    <option value="Dermatology">Dermatology</option>
+                                    <option value="Ophthalmology">Ophthalmology</option>
+                                    <option value="ENT">ENT (Ear, Nose, Throat)</option>
+                                    <option value="Psychiatry">Psychiatry</option>
+                                    <option value="Urology">Urology</option>
+                                    <option value="Gastroenterology">Gastroenterology</option>
+                                    <option value="Endocrinology">Endocrinology</option>
+                                    <option value="Dental">Dental</option>
+                                    <option value="Multi-Specialty">Multi-Specialty</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <label for="specialization">Specialization</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select class="form-control" id="hospital_type" name="hospital_type" required>
+                                    <option value="" disabled selected>Select Hospital Type</option>
+                                    <option value="Government">Government</option>
+                                    <option value="Private">Private</option>
+                                    <option value="Non-Profit">Non-Profit</option>
+                                    <option value="Community">Community</option>
+                                    <option value="Teaching">Teaching</option>
+                                    <option value="Specialty">Specialty</option>
+                                    <option value="Clinic">Clinic</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <label for="hospital_type">Hospital Type</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="license_number" name="license_number" placeholder="License Number" required>
+                                <label for="license_number">License Number</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-hospital-user me-2"></i>Register Hospital
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="features-section">
+            <h3 class="text-center mb-4">Benefits of Registration</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h5>Digital Records</h5>
+                        <p>Maintain digital health records for all patients with secure access and easy retrieval.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h5>Medical History</h5>
+                        <p>Access complete medical history of patients across all registered hospitals.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h5>Secure Platform</h5>
+                        <p>Advanced security features to protect sensitive medical information.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const hospitalForm = document.getElementById('hospital-form');
+        const loadingOverlay = document.querySelector('.loading-overlay');
+
+        hospitalForm.addEventListener('submit', () => {
+            loadingOverlay.style.display = 'flex';
+        });
+
+        // Add smooth animations to feature cards
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards.forEach(card => {
+            card.addEventListener('mouseover', () => {
+                card.style.transform = 'translateY(-10px)';
+            });
+            card.addEventListener('mouseout', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html> 

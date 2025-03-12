@@ -1,0 +1,796 @@
+{% extends "base.html" %}
+
+{% block title %}Universal Health Card System{% endblock %}
+
+{% block extra_css %}
+    <style>
+    /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+            margin: -3rem -16px 3rem -16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Cpath fill-rule="evenodd" fill="rgba(255,255,255,0.05)" d="M11 0l5 20H6l5-20zm17 31a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-8 2a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm-12 14a6 6 0 1 0 0-12 6 6 0 0 0 0 12zm52 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm5 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5-20a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"%3E%3C/path%3E%3C/svg%3E');
+            opacity: 0.7;
+        }
+
+        .hero-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            animation: fadeInUp 1s ease;
+            animation-delay: 0.3s;
+            animation-fill-mode: both;
+        }
+
+        .hero-buttons {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            animation: fadeIn 1s ease;
+            animation-delay: 0.6s;
+            animation-fill-mode: both;
+        }
+
+        .hero-button {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-button.primary {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .hero-button.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid white;
+            backdrop-filter: blur(5px);
+        }
+
+        .hero-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .hero-button i {
+            margin-right: 8px;
+        }
+
+    /* Section Cards */
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .section-card:hover {
+            transform: translateY(-7px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .section-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.8rem;
+            color: white;
+            font-size: 2.2rem;
+            box-shadow: 0 10px 20px rgba(44, 123, 229, 0.3);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .section-card:hover .section-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            padding: 0.8rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+            border: 1px solid transparent;
+        }
+
+        .feature-item:hover {
+            background-color: var(--hover-color);
+            transform: translateX(5px);
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(44, 123, 229, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .feature-item:hover .feature-icon {
+            background: var(--primary-color);
+            color: white;
+            transform: rotate(360deg);
+        }
+
+        .btn-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1.2rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            z-index: -1;
+        }
+
+        .btn-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(44, 123, 229, 0.3);
+            color: white;
+        }
+
+        .btn-section:hover::after {
+            animation: shimmer 1.5s infinite;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        /* Benefits Section */
+        .benefits-section {
+            margin: 5rem 0;
+            padding: 3rem 0;
+            background-color: var(--background-color);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .benefit-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            height: 100%;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+        
+        .benefit-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .benefit-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+        }
+        
+        .benefit-description {
+            color: var(--text-color);
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+        
+        /* Statistics Section */
+        .stats-section {
+            padding: 4rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            margin: 4rem -16px;
+            color: white;
+        }
+        
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .stat-value::after {
+            content: '+';
+            position: absolute;
+            top: 0;
+            right: -20px;
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Verification Modals */
+        .verification-modal .modal-content {
+            border-radius: 20px;
+            box-shadow: 0 15px 35px var(--shadow-color);
+            border: none;
+            overflow: hidden;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .verification-modal .modal-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+            border-bottom: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .verification-modal .modal-header::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.1) 50%, transparent 55%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        .verification-modal .modal-title {
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .verification-modal .modal-body {
+            padding: 2rem;
+        }
+
+        .verification-modal .form-control {
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .verification-modal .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(44, 123, 229, 0.25);
+        }
+
+        .verification-modal .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .verification-modal .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+        }
+
+        .verification-modal .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(44, 123, 229, 0.3);
+        }
+
+        .verification-modal .btn-primary:hover::after {
+            animation: shimmer 1.5s infinite;
+        }
+
+        .verification-modal .btn-secondary {
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .verification-modal .btn-secondary:hover {
+            transform: translateY(-3px);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="hero-section">
+        <div class="hero-container container">
+            <h1 class="hero-title animate__animated animate__fadeInDown">Universal Health Card System</h1>
+            <p class="hero-subtitle animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">Your comprehensive solution for managing health records, accessing medical services, and streamlining healthcare interactions across providers.</p>
+            <div class="hero-buttons">
+                <a href="{{ url_for('generate_verification') }}" class="hero-button primary animate__animated animate__fadeIn" style="animation-delay: 0.6s;">
+                    <i class="fas fa-key"></i>Generate Verification ID
+                </a>
+                <a href="{{ url_for('register') }}" class="hero-button secondary animate__animated animate__fadeIn" style="animation-delay: 0.8s;">
+                    <i class="fas fa-user-plus"></i>Register Now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Patient Section -->
+        <div class="col-md-6 animate__animated animate__fadeInLeft" style="animation-delay: 0.3s;">
+            <div class="section-card">
+                <div class="section-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h2 class="section-title">For Patients</h2>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div>Digital Health Card</div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div>Medical History Tracking</div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <div>QR Code Verification</div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div>Digital Medical Records</div>
+                    </li>
+                </ul>
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('user_login') }}" class="btn-section mb-2">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                    <a href="{{ url_for('register') }}" class="btn-section btn-outline">
+                        <i class="fas fa-user-plus me-2"></i>Register New Card
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hospital Section -->
+        <div class="col-md-6 animate__animated animate__fadeInRight" style="animation-delay: 0.3s;">
+            <div class="section-card">
+                <div class="section-icon">
+                    <i class="fas fa-hospital"></i>
+                </div>
+                <h2 class="section-title">For Healthcare Providers</h2>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-notes-medical"></i>
+                        </div>
+                        <div>Patient Records Management</div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div>Doctor's Dashboard</div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div>Secure Patient Verification</div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div>Analytics & Reports</div>
+                    </li>
+                </ul>
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('hospital_login') }}" class="btn-section mb-2">
+                        <i class="fas fa-sign-in-alt me-2"></i>Hospital Login
+                    </a>
+                    <a href="{{ url_for('hospital_register') }}" class="btn-section btn-outline">
+                        <i class="fas fa-hospital-alt me-2"></i>Register Hospital
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Benefits Section -->
+    <div class="benefits-section">
+        <div class="container">
+            <h2 class="text-center mb-5 section-title animate__animated animate__fadeIn">Benefits of Universal Health Card</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="benefit-title">Fast Access to Care</h3>
+                        <p class="benefit-description">Streamlined patient verification and medical history access, reducing wait times and administrative overhead.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3 class="benefit-title">Secure Records</h3>
+                        <p class="benefit-description">State-of-the-art encryption and access controls protect your sensitive medical information.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3 class="benefit-title">Universal Acceptance</h3>
+                        <p class="benefit-description">Recognized by healthcare providers nationwide, ensuring seamless care wherever you go.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h3 class="benefit-title">Complete History</h3>
+                        <p class="benefit-description">Comprehensive medical record tracking including treatments, medications, and hospital visits.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="benefit-title">Digital Access</h3>
+                        <p class="benefit-description">Access your health card and records anytime, anywhere through our secure portal.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-file-medical-alt"></i>
+                        </div>
+                        <h3 class="benefit-title">Digital Certificates</h3>
+                        <p class="benefit-description">Generate and access medical certificates and documents digitally with secure verification.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistics Section -->
+    <div class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4 mb-md-0 animate__animated animate__fadeIn" style="animation-delay: 0.1s;">
+                    <div class="stat-value">1M</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0 animate__animated animate__fadeIn" style="animation-delay: 0.2s;">
+                    <div class="stat-value">500</div>
+                    <div class="stat-label">Healthcare Providers</div>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0 animate__animated animate__fadeIn" style="animation-delay: 0.3s;">
+                    <div class="stat-value">10M</div>
+                    <div class="stat-label">Medical Records</div>
+                </div>
+                <div class="col-md-3 animate__animated animate__fadeIn" style="animation-delay: 0.4s;">
+                    <div class="stat-value">98</div>
+                    <div class="stat-label">Customer Satisfaction %</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Call to Action -->
+    <div class="text-center mt-5 mb-4 animate__animated animate__fadeIn">
+        <h2 class="section-title">Ready to Get Started?</h2>
+        <p class="mb-4">Join thousands of users who have simplified their healthcare experience.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg animate__animated animate__pulse" style="animation-delay: 0.5s; animation-iteration-count: infinite; animation-duration: 2s;">
+                <i class="fas fa-user-plus me-2"></i>Register Now
+            </a>
+            <button type="button" class="btn btn-outline-primary btn-lg" data-bs-toggle="modal" data-bs-target="#healthCardVerificationModal">
+                <i class="fas fa-search me-2"></i>Verify Health Card
+            </button>
+        </div>
+        <div class="mt-3">
+            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#verifyIdModal">
+                <i class="fas fa-key me-2"></i>Verify Verification ID
+            </button>
+        </div>
+    </div>
+    
+    <!-- Health Card Verification Modal -->
+    <div class="modal fade" id="healthCardVerificationModal" tabindex="-1" aria-labelledby="healthCardVerificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="healthCardVerificationModalLabel">Verify Health Card</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('verify_card') }}" method="POST" id="health-card-verification-form">
+                        <div class="mb-4">
+                            <label for="uin" class="form-label">Enter UIN (Universal Identification Number)</label>
+                            <input type="text" class="form-control" id="uin" name="uin" placeholder="Format: UIN-YYYYMMDD-XXXX" required pattern="UIN-\d{8}-[A-Z0-9]{4}">
+                            <small class="form-text text-muted">Example: UIN-20220315-AB12</small>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary" id="health-card-submit-btn">
+                                <i class="fas fa-search me-2"></i>Verify Health Card
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Verification ID Modal -->
+    <div class="modal fade verification-modal" id="verifyIdModal" tabindex="-1" aria-labelledby="verifyIdModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content animate__animated animate__fadeIn">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="verifyIdModalLabel">
+                        <i class="fas fa-key me-2"></i>Verify Verification ID
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="verification-id-form">
+                        <div class="mb-4">
+                            <label for="verification_id" class="form-label">Enter Verification ID</label>
+                            <input type="text" class="form-control" id="verification_id" name="verification_id" placeholder="Enter your 8-digit verification ID" required>
+                            <small class="form-text text-muted">Example: ABC12345</small>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-key me-2"></i>Verify ID
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize animation on scroll
+    document.addEventListener('DOMContentLoaded', function() {
+        const animateElements = document.querySelectorAll('.animate__animated');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // If element is in view
+                if (entry.isIntersecting) {
+                    entry.target.style.visibility = 'visible';
+                    // Remove observer after animating
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        
+        animateElements.forEach(element => {
+            // Hide element first
+            element.style.visibility = 'hidden';
+            // Then observe it
+            observer.observe(element);
+        });
+        
+        // Add hover effect to benefit cards
+        document.querySelectorAll('.benefit-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.querySelector('.benefit-icon').classList.add('animate__animated', 'animate__heartBeat');
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.querySelector('.benefit-icon').classList.remove('animate__animated', 'animate__heartBeat');
+            });
+        });
+        
+        // Counter animation for statistics
+        const stats = document.querySelectorAll('.stat-value');
+        stats.forEach(stat => {
+            const target = parseInt(stat.innerHTML);
+            const duration = 2000; // 2 seconds
+            const step = Math.max(1, Math.floor(target / (duration / 20))); // Update every 20ms
+            
+            let current = 0;
+            const interval = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(interval);
+                }
+                stat.innerHTML = current;
+            }, 20);
+        });
+        
+        // Handle verification ID form submission
+        document.getElementById('verification-id-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const verificationId = document.getElementById('verification_id').value.trim();
+            if (!verificationId) return;
+            
+            // Add loading state to button
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Verifying...';
+            submitBtn.disabled = true;
+            
+            // Redirect to verification ID data page
+            window.location.href = `/get-verification-data/${verificationId}`;
+        });
+        
+        // Health Card Verification Form Handler
+        const healthCardForm = document.getElementById('health-card-verification-form');
+        const healthCardSubmitBtn = document.getElementById('health-card-submit-btn');
+        
+        if (healthCardForm) {
+            healthCardForm.addEventListener('submit', function(e) {
+                // Don't prevent default - allow regular form submission
+                // e.preventDefault();  // Removing this line
+                
+                const uinInput = document.getElementById('uin');
+                const uinValue = uinInput.value.trim();
+                
+                // Validate UIN format
+                const uinPattern = /^UIN-\d{8}-[A-Z0-9]{4}$/;
+                if (!uinPattern.test(uinValue)) {
+                    alert('Please enter a valid UIN in the format: UIN-YYYYMMDD-XXXX');
+                    e.preventDefault(); // Only prevent submission if validation fails
+                    return;
+                }
+                
+                // Show loading state
+                healthCardSubmitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Verifying...';
+                healthCardSubmitBtn.disabled = true;
+                
+                // The form will now submit naturally
+                // No need to call healthCardForm.submit()
+            });
+        }
+    });
+</script>
+{% endblock %}

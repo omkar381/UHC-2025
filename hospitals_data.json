@@ -1,0 +1,136 @@
+{
+    "HOSP-20250308-ZV1QU3": {
+        "name": "HHB",
+        "address": "hno 10-2/13 sangmeshwar colony beside nisty hospital gulbarga",
+        "phone": "1234567890",
+        "email": "HHB@hhb.com",
+        "specialization": "general medicine",
+        "license_number": "KA32HOSP112",
+        "created_at": "2025-03-08 22:08:17",
+        "status": "active"
+    },
+    "HOSP-20250308-03BJ6X": {
+        "name": "abcd",
+        "address": "ddddd",
+        "phone": "09945203603",
+        "email": "abc@abc.com",
+        "specialization": "geneeal",
+        "license_number": "abc12345",
+        "created_at": "2025-03-08 23:00:06",
+        "status": "active",
+        "id": "HOSP-20250308-03BJ6X"
+    },
+    "HOSP-20250308-P4NKHY": {
+        "name": "Sidraj",
+        "address": "s",
+        "phone": "s",
+        "email": "sidrajpadashetty@gmail.com",
+        "specialization": "sss",
+        "license_number": "123456",
+        "created_at": "2025-03-08 23:06:34",
+        "status": "active"
+    },
+    "HOSP-20250309-19VP5W": {
+        "name": "ABHA",
+        "address": "anand hotel",
+        "phone": "09945203603",
+        "email": "omkarpadashetty123@gmail.com",
+        "specialization": "general medicine",
+        "license_number": "123456",
+        "created_at": "2025-03-09 12:04:45",
+        "status": "active"
+    },
+    "HOSP-20250309-PIIGSC": {
+        "name": "jkjjhh",
+        "address": "hjgre567",
+        "phone": "87654345678",
+        "email": "hgf@fgh.com",
+        "specialization": "kjjh",
+        "license_number": "hjhgf",
+        "created_at": "2025-03-09 14:50:33",
+        "status": "active",
+        "id": "HOSP-20250309-PIIGSC"
+    },
+    "HOSP-20250309-U19RFN": {
+        "name": "jhgfdse",
+        "address": "dfghjiuytre",
+        "phone": "34567876543",
+        "email": "mgfdf@hh.com",
+        "specialization": "trdefghjk",
+        "license_number": "hgfdsdfgh",
+        "created_at": "2025-03-09 15:15:21",
+        "status": "active"
+    },
+    "HOSP-20250309-DX9K9D": {
+        "name": "hgfds",
+        "address": "bhgfd",
+        "phone": "fds",
+        "email": "hgfds@gh.com",
+        "specialization": "njhg",
+        "hospital_type": "Community",
+        "license_number": "jhgfd",
+        "created_at": "2025-03-09 15:37:48",
+        "status": "active"
+    },
+    "HOSP-20250309-9UNU0P": {
+        "name": "ujhgfds,mnhgfd",
+        "address": "hf",
+        "phone": "44456778",
+        "email": "hhgg@fgjjj.com",
+        "specialization": "General Medicine",
+        "hospital_type": "Community",
+        "license_number": "hjhgf",
+        "created_at": "2025-03-09 19:48:48",
+        "status": "active"
+    },
+    "HOSP-20250309-AUKMA0": {
+        "name": "nbfdw",
+        "address": "hf",
+        "phone": "07654323766",
+        "email": "hhgg@fgjjj.com",
+        "password": "487df49f0bfbe33fe136c0936ac2ab784a41ad3e44bc853f1a56798b44766060",
+        "specialization": "Endocrinology",
+        "hospital_type": "Clinic",
+        "license_number": "gy53r54",
+        "created_at": "2025-03-09 20:20:02",
+        "status": "active",
+        "id": "HOSP-20250309-AUKMA0"
+    },
+    "HOSP-20250309-PJBILP": {
+        "name": "nbgf",
+        "address": "fcvv",
+        "phone": "565574433",
+        "email": "hgggg@hh.com",
+        "password": "487df49f0bfbe33fe136c0936ac2ab784a41ad3e44bc853f1a56798b44766060",
+        "specialization": "Gastroenterology",
+        "hospital_type": "Clinic",
+        "license_number": "890",
+        "created_at": "2025-03-09 20:22:31",
+        "status": "active"
+    },
+    "HOSP-20250309-UL8R6Y": {
+        "name": "nbgf",
+        "address": "33253544ddx",
+        "phone": "453463633",
+        "email": "hgggg@hh.com",
+        "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+        "specialization": "General Medicine",
+        "hospital_type": "Private",
+        "license_number": "890",
+        "created_at": "2025-03-09 21:28:51",
+        "status": "active",
+        "id": "HOSP-20250309-UL8R6Y"
+    },
+    "HOSP-20250309-EVTUKU": {
+        "name": "bgfew",
+        "address": "bhgfd",
+        "phone": "34567876545",
+        "email": "hgfds@gh.com",
+        "password": "ca5cdd0a139364382eabaa8e107ddecabbe4d4ec0c7f01f26d80aeedde6ec987",
+        "specialization": "Gastroenterology",
+        "hospital_type": "Teaching",
+        "license_number": "567",
+        "created_at": "2025-03-09 22:47:39",
+        "status": "active"
+    }
+}

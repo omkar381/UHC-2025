@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Universal Health Card - PDF</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+        
+        .page {
+            width: 210mm;
+            height: 297mm;
+            padding: 10mm;
+            box-sizing: border-box;
+            position: relative;
+        }
+        
+        .id-card-container {
+            width: 90mm;
+            height: 55mm;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            border-radius: 3mm;
+            overflow: hidden;
+            box-shadow: 0 2mm 5mm rgba(0,0,0,0.1);
+            position: relative;
+            border: 0.5mm solid #ddd;
+            page-break-inside: avoid;
+        }
+        
+        .id-card-header {
+            height: 15mm;
+            background: linear-gradient(to right, #4e73df, #224abe);
+            padding: 2mm 3mm;
+            color: white;
+            position: relative;
+        }
+        
+        .id-card-logo {
+            position: absolute;
+            top: 2mm;
+            left: 3mm;
+            display: flex;
+            align-items: center;
+        }
+        
+        .id-card-logo-text {
+            font-size: 3.5mm;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-left: 2mm;
+        }
+        
+        .id-card-logo-text small {
+            font-size: 2mm;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        
+        .id-card-title {
+            position: absolute;
+            top: 3mm;
+            right: 3mm;
+            font-size: 3.5mm;
+            font-weight: 700;
+            text-align: right;
+        }
+        
+        .id-card-body {
+            padding: 3mm;
+            display: flex;
+        }
+        
+        .id-card-photo {
+            width: 25mm;
+            height: 30mm;
+            border: 1mm solid #4e73df;
+            border-radius: 2mm;
+            overflow: hidden;
+            margin-right: 3mm;
+            background-color: #f1f3f9;
+        }
+        
+        .id-card-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .id-card-details {
+            flex: 1;
+        }
+        
+        .id-card-detail {
+            margin-bottom: 1.5mm;
+        }
+        
+        .id-card-label {
+            font-size: 1.8mm;
+            color: #6c757d;
+            margin-bottom: 0.5mm;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .id-card-value {
+            font-size: 2.2mm;
+            font-weight: 600;
+            color: #2e384d;
+        }
+        
+        .id-card-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2mm 3mm;
+            background-color: #f8f9fc;
+            border-top: 0.3mm solid #e3e6f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 10mm;
+        }
+        
+        .id-card-qr {
+            width: 8mm;
+            height: 8mm;
+            background-color: white;
+            padding: 0.5mm;
+            border-radius: 1mm;
+            border: 0.3mm solid #e3e6f0;
+        }
+        
+        .id-card-qr img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .id-card-signature {
+            text-align: center;
+            margin-right: 3mm;
+        }
+        
+        .signature-line {
+            width: 20mm;
+            height: 0.3mm;
+            background-color: #2e384d;
+            margin: 1mm 0;
+        }
+        
+        .signature-text {
+            font-size: 1.8mm;
+            color: #6c757d;
+        }
+        
+        .id-card-validity {
+            text-align: right;
+            font-size: 1.8mm;
+        }
+        
+        .valid-text {
+            font-weight: 600;
+            color: #28a745;
+        }
+        
+        .id-card-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20mm;
+            color: rgba(78, 115, 223, 0.05);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .security-features {
+            position: absolute;
+            bottom: 12mm;
+            left: 3mm;
+            right: 3mm;
+            height: 2mm;
+            background: linear-gradient(90deg, 
+                #ff0000 0%, #ff0000 10%, 
+                #00ff00 10%, #00ff00 20%, 
+                #0000ff 20%, #0000ff 30%, 
+                #ff0000 30%, #ff0000 40%, 
+                #00ff00 40%, #00ff00 50%, 
+                #0000ff 50%, #0000ff 60%, 
+                #ff0000 60%, #ff0000 70%, 
+                #00ff00 70%, #00ff00 80%, 
+                #0000ff 80%, #0000ff 90%, 
+                #ff0000 90%, #ff0000 100%);
+            border-radius: 1mm;
+        }
+        
+        .hologram {
+            position: absolute;
+            top: 20mm;
+            right: 5mm;
+            width: 10mm;
+            height: 10mm;
+            background: radial-gradient(circle, 
+                rgba(255,255,255,0.9) 0%, 
+                rgba(255,255,255,0.5) 25%, 
+                rgba(255,255,255,0.3) 50%, 
+                rgba(255,255,255,0.1) 75%, 
+                rgba(255,255,255,0) 100%);
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+        
+        .uin-highlight {
+            background-color: #e8f0fe;
+            padding: 0.5mm 1mm;
+            border-radius: 1mm;
+            border: 0.3mm solid #4e73df;
+            display: inline-block;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 10mm;
+            color: #4e73df;
+            font-size: 6mm;
+            font-weight: 700;
+        }
+        
+        .instructions {
+            margin-top: 10mm;
+            padding: 5mm;
+            border: 0.5mm solid #e3e6f0;
+            border-radius: 2mm;
+            background-color: #f8f9fc;
+        }
+        
+        .instructions h3 {
+            color: #4e73df;
+            margin-top: 0;
+            font-size: 4mm;
+        }
+        
+        .instructions ul {
+            padding-left: 5mm;
+        }
+        
+        .instructions li {
+            margin-bottom: 2mm;
+            font-size: 3mm;
+        }
+        
+        .official-seal {
+            position: absolute;
+            bottom: 20mm;
+            right: 20mm;
+            width: 25mm;
+            height: 25mm;
+            border: 0.5mm dashed #4e73df;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(-15deg);
+            opacity: 0.7;
+        }
+        
+        .official-seal-inner {
+            width: 20mm;
+            height: 20mm;
+            border: 0.5mm solid #4e73df;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5mm;
+            text-align: center;
+            color: #4e73df;
+            font-weight: 700;
+            padding: 2mm;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="page-title">UNIVERSAL HEALTH CARD</div>
+        
+        <div class="id-card-container">
+            <!-- Security hologram -->
+            <div class="hologram"></div>
+            
+            <!-- Header -->
+            <div class="id-card-header">
+                <div class="id-card-logo">
+                    <div class="id-card-logo-text">
+                        Universal Health<br>
+                        <small>NATIONAL HEALTH PROGRAM</small>
+                    </div>
+                </div>
+                <div class="id-card-title">
+                    HEALTH CARD
+                </div>
+            </div>
+            
+            <!-- Body -->
+            <div class="id-card-body">
+                <!-- Photo -->
+                <div class="id-card-photo">
+                    {% if photo_path %}
+                    <img src="{{ photo_path }}" alt="User Photo">
+                    {% endif %}
+                </div>
+                
+                <!-- Details -->
+                <div class="id-card-details">
+                    <div class="id-card-detail">
+                        <div class="id-card-label">FULL NAME</div>
+                        <div class="id-card-value">{{ name }}</div>
+                    </div>
+                    
+                    <div class="id-card-detail">
+                        <div class="id-card-label">DATE OF BIRTH</div>
+                        <div class="id-card-value">{{ dob }}</div>
+                    </div>
+                    
+                    <div class="id-card-detail">
+                        <div class="id-card-label">UIN</div>
+                        <div class="id-card-value uin-highlight">{{ uin }}</div>
+                    </div>
+                    
+                    <div class="id-card-detail">
+                        <div class="id-card-label">ADDRESS</div>
+                        <div class="id-card-value" style="font-size: 1.8mm;">{{ address }}</div>
+                    </div>
+                    
+                    <div class="id-card-detail">
+                        <div class="id-card-label">PHONE</div>
+                        <div class="id-card-value">{{ phone }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Security strip -->
+            <div class="security-features"></div>
+            
+            <!-- Footer -->
+            <div class="id-card-footer">
+                <div class="id-card-qr">
+                    <img src="{{ qr_path }}" alt="QR Code">
+                </div>
+                
+                <div class="id-card-signature">
+                    <div class="signature-line"></div>
+                    <div class="signature-text">Authorized Signature</div>
+                </div>
+                
+                <div class="id-card-validity">
+                    <div>Issue: {{ created_at }}</div>
+                    <div>Expiry: {{ expiry_date }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>Important Information</h3>
+            <ul>
+                <li>This card is the property of the Universal Health Program.</li>
+                <li>If found, please return to the nearest health center.</li>
+                <li>This card must be presented when seeking healthcare services.</li>
+                <li>Your UIN (Unique Identification Number) is: <strong>{{ uin }}</strong></li>
+                <li>For verification, visit our website or scan the QR code.</li>
+                <li>Card is valid until: <strong>{{ expiry_date }}</strong></li>
+            </ul>
+        </div>
+        
+        <div class="official-seal">
+            <div class="official-seal-inner">
+                OFFICIAL<br>UNIVERSAL<br>HEALTH<br>PROGRAM
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
