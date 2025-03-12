@@ -74,7 +74,6 @@ google-cloud-vision==3.8.1
 google-crc32c==1.6.0
 google-pasta==0.2.0
 googleapis-common-protos==1.66.0
-googletrans==4.0.0rc1
 greenlet==3.1.1
 grpcio==1.67.1
 grpcio-status==1.67.1
@@ -86,7 +85,6 @@ h5py==3.12.1
 hpack==3.0.0
 hstspreload==2024.12.1
 httpcore==1.0.7
-httpx==0.28.1
 huggingface-hub==0.26.1
 hyperframe==5.2.0
 idna==2.10
